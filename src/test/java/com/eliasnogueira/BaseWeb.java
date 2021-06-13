@@ -22,12 +22,21 @@
  * SOFTWARE.
  */
 
-package com.eliasnogueira;
+package com.eliasnogueira ;
 
 import com.eliasnogueira.driver.DriverManager;
 import com.eliasnogueira.driver.TargetFactory;
 import com.eliasnogueira.report.AllureManager;
+import com.eliasnogueira.test.utilities.UtilityTest;
+
+import org.aeonbits.owner.Config;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.CommandExecutor;
+import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
+import org.testng.TestNGUtils;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -35,7 +44,13 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import static com.eliasnogueira.config.ConfigurationManager.configuration;
+// import jdk.internal.net.http.common.Log;
+
+import static com.leadergroup.config.ConfigurationManager.configuration;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
 
 @Listeners({TestListener.class})
 public abstract class BaseWeb {
@@ -48,14 +63,35 @@ public abstract class BaseWeb {
     @BeforeMethod(alwaysRun = true)
     @Parameters("browser")
     public void preCondition(@Optional("chrome") String browser) {
-        WebDriver driver = new TargetFactory().createInstance(browser);
+        if(browser.equals("chrome") && !configuration().quit_browser() && configuration().same_browser()){
+            RemoteWebDriver driver = null;
+            try {
+                SessionId sessionId = configuration().sessionId();
+                URL driverUrl = configuration().driverUrl();
+                driver = UtilityTest.createDriverFromSession(sessionId, driverUrl);
+                DriverManager.setDriver(driver);
+                DriverManager.getDriver().get(configuration().url());
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+                driver =  (RemoteWebDriver)new TargetFactory().createInstance(browser);
+                DriverManager.setDriver(driver);
+                DriverManager.getDriver().get(configuration().url());
+                UtilityTest.saveDriverInfo(driver);
+                return;
+            }
+        }
+        WebDriver driver =  new TargetFactory().createInstance(browser);
         DriverManager.setDriver(driver);
-
         DriverManager.getDriver().get(configuration().url());
     }
 
     @AfterMethod(alwaysRun = true)
     public void postCondition() {
-        DriverManager.quit();
+        
+        boolean quit_browser = configuration().quit_browser();
+        if(quit_browser){
+            DriverManager.quit();
+        }
     }
 }

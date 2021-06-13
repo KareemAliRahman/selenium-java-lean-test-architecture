@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.eliasnogueira.config;
+package com.weliasnogueira.config;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.LoadPolicy;
@@ -59,4 +59,10 @@ public interface Configuration extends Config {
 
     @Key("faker.locale")
     String faker();
+
+    @Key("session_id")
+    SessionId sessionId();
+
+    @Key("driver_url")
+    URL driverUrl();
 }
