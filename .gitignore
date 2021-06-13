@@ -10,3 +10,9 @@ target/
 
 # Allure
 .allure
+
+
+.classpath
+.factorypath
+.project
+allure-results/

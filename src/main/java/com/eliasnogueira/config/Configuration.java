@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
-package com.weliasnogueira.config;
+package com.eliasnogueira.config;
+
+import java.net.URL;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.LoadPolicy;
 import org.aeonbits.owner.Config.LoadType;
+import org.openqa.selenium.remote.SessionId;
 
 @LoadPolicy(LoadType.MERGE)
 @Config.Sources({
     "system:properties",
     "classpath:general.properties",
     "classpath:local.properties",
+    "classpath:driver-info.properties",
     "classpath:grid.properties"})
 public interface Configuration extends Config {
 
@@ -41,6 +45,12 @@ public interface Configuration extends Config {
 
     @Key("browser")
     String browser();
+
+    @Key("quit_browser")
+    Boolean quit_browser();
+
+    @Key("same_browser")
+    Boolean same_browser();
 
     @Key("headless")
     Boolean headless();

@@ -27,7 +27,8 @@ package com.eliasnogueira ;
 import com.eliasnogueira.driver.DriverManager;
 import com.eliasnogueira.driver.TargetFactory;
 import com.eliasnogueira.report.AllureManager;
-import com.eliasnogueira.test.utilities.UtilityTest;
+//import com.eliasnogueira.test.utilities.UtilityTest;
+import com.eliasnogueira.test.utilities.UtilityTest; 
 
 import org.aeonbits.owner.Config;
 import org.openqa.selenium.WebDriver;
@@ -46,7 +47,7 @@ import org.testng.annotations.Parameters;
 
 // import jdk.internal.net.http.common.Log;
 
-import static com.leadergroup.config.ConfigurationManager.configuration;
+import static com.eliasnogueira.config.ConfigurationManager.configuration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
